@@ -1,5 +1,6 @@
 package com.clean.splearn.domain;
 
+import com.clean.splearn.shared.Email;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -9,7 +10,7 @@ import static org.springframework.util.Assert.state;
 @Getter
 @ToString
 public class Member {
-    private String email;
+    private Email email;
 
     private String nickname;
 
@@ -23,7 +24,9 @@ public class Member {
     public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
-        member.email = requireNonNull(createRequest.email());
+        Email email = new Email(createRequest.email());
+
+        member.email = requireNonNull(email);
         member.nickname = requireNonNull(createRequest.nickname());
         member.passwordHash = passwordEncoder.encode(createRequest.password());
 
