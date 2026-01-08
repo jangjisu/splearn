@@ -1,4 +1,4 @@
-package com.clean.splearn.shared;
+package com.clean.splearn.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,5 @@
 package com.clean.splearn.domain;
 
-import com.clean.splearn.shared.Email;
 import lombok.Getter;
 import lombok.ToString;
 
