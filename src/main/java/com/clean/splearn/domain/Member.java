@@ -20,14 +20,14 @@ public class Member {
     private Member() {
     }
 
-    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
+    public static Member register(MemberRegisterRequest registRequest, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
-        Email email = new Email(createRequest.email());
+        Email email = new Email(registRequest.email());
 
         member.email = requireNonNull(email);
-        member.nickname = requireNonNull(createRequest.nickname());
-        member.passwordHash = passwordEncoder.encode(createRequest.password());
+        member.nickname = requireNonNull(registRequest.nickname());
+        member.passwordHash = passwordEncoder.encode(registRequest.password());
 
         member.status = MemberStatus.PENDING;
 

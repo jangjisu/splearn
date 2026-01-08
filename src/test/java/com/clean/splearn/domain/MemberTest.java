@@ -25,12 +25,12 @@ class MemberTest {
             }
         };
 
-        member = Member.create(new MemberCreateRequest("jsjang@splearn.app", "david", "secret"), passwordEncoder);
+        member = Member.register(new MemberRegisterRequest("jsjang@splearn.app", "david", "secret"), passwordEncoder);
     }
 
     @DisplayName("새로 만들어진 상태의 멤버는 PENDING 상태이다")
     @Test
-    void createMember() {
+    void registerMember() {
         // given // when // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
@@ -130,10 +130,10 @@ class MemberTest {
     @Test
     void invalidEmail() {
         // given // when // then
-        assertThatThrownBy(() -> Member.create(new MemberCreateRequest("invalid email", "david", "secret"), passwordEncoder))
+        assertThatThrownBy(() -> Member.register(new MemberRegisterRequest("invalid email", "david", "secret"), passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
 
-        Member.create(new MemberCreateRequest("jsjangdv@gmail.com", "david", "secret"), passwordEncoder);
+        Member.register(new MemberRegisterRequest("jsjangdv@gmail.com", "david", "secret"), passwordEncoder);
     }
 
 }
