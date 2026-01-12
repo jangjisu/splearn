@@ -21,7 +21,7 @@ class MemberRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
-    @DisplayName("멤버를 생성한다.")
+    @DisplayName("회원을 등록한다.")
     @Test
     void createMember() {
         // given
@@ -35,7 +35,7 @@ class MemberRepositoryTest {
         assertNotNull(savedMember.getId());
     }
 
-    @DisplayName("같은 이메일을 가진 유저를 생성할 경우 실패한다.")
+    @DisplayName("같은 이메일을 가진 회원를 생성할 경우 실패한다.")
     @Test
     void duplicateEmailFail() {
         // given

@@ -19,14 +19,14 @@ class MemberTest {
         member = Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 
-    @DisplayName("새로 만들어진 상태의 멤버는 PENDING 상태이다")
+    @DisplayName("새로 만들어진 상태의 회원의 PENDING 상태이다")
     @Test
     void registerMember() {
         // given // when // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
-    @DisplayName("활성화 하면 멤버가 활성화 상태가 된다.")
+    @DisplayName("활성화 하면 회원이 활성화 상태가 된다.")
     @Test
     void activate() {
         // given // when
@@ -104,7 +104,7 @@ class MemberTest {
         assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
     }
 
-    @DisplayName("멤버 활성화 여부를 판단할 수 있다")
+    @DisplayName("회원의 활성화 여부를 판단할 수 있다")
     @Test
     void isActive() {
         // given // when // then
