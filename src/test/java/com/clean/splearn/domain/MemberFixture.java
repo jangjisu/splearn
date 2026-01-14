@@ -2,7 +2,7 @@ package com.clean.splearn.domain;
 
 public class MemberFixture {
     public static MemberRegisterRequest createMemberRegisterRequest(String mail) {
-        return new MemberRegisterRequest(mail, "david", "secret");
+        return new MemberRegisterRequest(mail, "david", "passwordSecret");
     }
 
     public static MemberRegisterRequest createMemberRegisterRequest() {

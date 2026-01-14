@@ -78,7 +78,7 @@ class MemberTest {
     @Test
     void verifyPassword() {
         // given // when // then
-        assertThat(member.verifyPassword("secret", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("passwordSecret", passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("hello", passwordEncoder)).isFalse();
     }
 
@@ -98,10 +98,10 @@ class MemberTest {
     @Test
     void changePassword() {
         // given // when
-        member.changePassword("verysecret", passwordEncoder);
+        member.changePassword("verySecret", passwordEncoder);
 
         // then
-        assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("verySecret", passwordEncoder)).isTrue();
     }
 
     @DisplayName("회원의 활성화 여부를 판단할 수 있다")

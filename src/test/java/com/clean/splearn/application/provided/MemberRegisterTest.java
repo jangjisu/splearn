@@ -1,11 +1,9 @@
 package com.clean.splearn.application.provided;
 
 import com.clean.splearn.SplearnTestConfiguration;
-import com.clean.splearn.domain.DuplicateEmailException;
-import com.clean.splearn.domain.Member;
-import com.clean.splearn.domain.MemberFixture;
-import com.clean.splearn.domain.MemberStatus;
+import com.clean.splearn.domain.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +33,21 @@ record MemberRegisterTest(MemberRegister memberRegister) {
 
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @DisplayName("회원 생성에 실패한다.")
+    @Test
+    void memberRegisterRequestFail() {
+
+        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "Toby", "secret"));
+        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "David", "secret"));
+        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "DavidTobyDavidTobyDavid", "secret"));
+        extracted(new MemberRegisterRequest("jsjangdv", "DavidTobyDavidTobyDavid", "secret"));
+    }
+
+    private void extracted(MemberRegisterRequest invalid) {
+        assertThatThrownBy(() -> memberRegister.register(invalid))
+            .isInstanceOf(ConstraintViolationException.class);
     }
 
 }
