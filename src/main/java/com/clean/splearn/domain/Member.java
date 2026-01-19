@@ -1,10 +1,7 @@
 package com.clean.splearn.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -16,6 +13,7 @@ import static org.springframework.util.Assert.state;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NaturalIdCache
+@EqualsAndHashCode
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
