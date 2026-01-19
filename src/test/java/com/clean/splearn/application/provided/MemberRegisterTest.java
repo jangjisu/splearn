@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -39,13 +40,13 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
     @Test
     void memberRegisterRequestFail() {
 
-        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "Toby", "secret"));
-        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "David", "secret"));
-        extracted(new MemberRegisterRequest("jsjangdv@gmail.com", "DavidTobyDavidTobyDavid", "secret"));
-        extracted(new MemberRegisterRequest("jsjangdv", "DavidTobyDavidTobyDavid", "secret"));
+        checkValidation(new MemberRegisterRequest("jsjangdv@gmail.com", "Toby", "secret"));
+        checkValidation(new MemberRegisterRequest("jsjangdv@gmail.com", "David", "secret"));
+        checkValidation(new MemberRegisterRequest("jsjangdv@gmail.com", "DavidTobyDavidTobyDavid", "secret"));
+        checkValidation(new MemberRegisterRequest("jsjangdv", "DavidTobyDavidTobyDavid", "secret"));
     }
 
-    private void extracted(MemberRegisterRequest invalid) {
+    private void checkValidation(MemberRegisterRequest invalid) {
         assertThatThrownBy(() -> memberRegister.register(invalid))
             .isInstanceOf(ConstraintViolationException.class);
     }
