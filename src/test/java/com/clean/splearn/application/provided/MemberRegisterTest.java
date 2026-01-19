@@ -2,6 +2,7 @@ package com.clean.splearn.application.provided;
 
 import com.clean.splearn.SplearnTestConfiguration;
 import com.clean.splearn.domain.*;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
@@ -9,13 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 @Import(SplearnTestConfiguration.class)
-record MemberRegisterTest(MemberRegister memberRegister) {
+record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityManager) {
 
     @DisplayName("회원을 등록한다")
     @Test
@@ -50,4 +50,19 @@ record MemberRegisterTest(MemberRegister memberRegister) {
             .isInstanceOf(ConstraintViolationException.class);
     }
 
+    @DisplayName("회원을 활성화 한다.")
+    @Test
+    void activate() {
+        // given
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+
+        // then
+        assertThat(member.isActive()).isTrue();
+    }
 }
