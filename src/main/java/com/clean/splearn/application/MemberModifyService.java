@@ -1,5 +1,6 @@
 package com.clean.splearn.application;
 
+import com.clean.splearn.application.provided.MemberFinder;
 import com.clean.splearn.application.provided.MemberRegister;
 import com.clean.splearn.application.required.EmailSender;
 import com.clean.splearn.application.required.MemberRepository;
@@ -13,7 +14,8 @@ import org.springframework.validation.annotation.Validated;
 @Transactional
 @Validated
 @RequiredArgsConstructor
-public class MemberService implements MemberRegister {
+public class MemberModifyService implements MemberRegister {
+    private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
@@ -33,8 +35,7 @@ public class MemberService implements MemberRegister {
 
     @Override
     public Member activate(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다. id: " + memberId));
+        Member member = memberFinder.find(memberId);
 
         member.activate();
 
