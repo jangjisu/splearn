@@ -1,7 +1,7 @@
-package com.clean.splearn.application.provided;
+package com.clean.splearn.application.member.provided;
 
 import com.clean.splearn.SplearnTestConfiguration;
-import com.clean.splearn.domain.*;
+import com.clean.splearn.domain.member.*;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;

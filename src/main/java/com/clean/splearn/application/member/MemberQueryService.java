@@ -1,8 +1,8 @@
-package com.clean.splearn.application;
+package com.clean.splearn.application.member;
 
-import com.clean.splearn.application.provided.MemberFinder;
-import com.clean.splearn.application.required.MemberRepository;
-import com.clean.splearn.domain.Member;
+import com.clean.splearn.application.member.provided.MemberFinder;
+import com.clean.splearn.application.member.required.MemberRepository;
+import com.clean.splearn.domain.member.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,11 @@
-package com.clean.splearn.domain;
+package com.clean.splearn.domain.member;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.clean.splearn.domain.MemberFixture.createMemberRegisterRequest;
-import static com.clean.splearn.domain.MemberFixture.createPasswordEncoder;
+import static com.clean.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static com.clean.splearn.domain.member.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,21 +19,24 @@ class MemberTest {
         member = Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 
-    @DisplayName("새로 만들어진 상태의 회원의 PENDING 상태이다")
+    @DisplayName("새로 만들어진 상태의 회원의 PENDING 상태이며, detail 에 등록일시가 추가된다.")
     @Test
     void registerMember() {
         // given // when // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @DisplayName("활성화 하면 회원이 활성화 상태가 된다.")
     @Test
     void activate() {
         // given // when
+        assertThat(member.getDetail().getActivatedAt()).isNull();
         member.activate();
 
         // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @DisplayName("대기 상태가 아닌 상황에서 활성화 할 경우 에러가 발생한다")
@@ -54,10 +57,12 @@ class MemberTest {
         member.activate();
 
         // when
+        assertThat(member.getDetail().getDeactivatedAt()).isNull();
         member.deactivate();
 
         // then
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @DisplayName("활성화 상태가 아닌 상황에서 비활성화 할 경우 에러가 발생한다")
@@ -125,6 +130,21 @@ class MemberTest {
                 .isInstanceOf(IllegalArgumentException.class);
 
         Member.register(createMemberRegisterRequest(), passwordEncoder);
+    }
+
+    @DisplayName("")
+    @Test
+    void updateInfo() {
+        // given
+        member.activate();
+        // when
+        var updateRequest = new MemberInfoUpdateRequest("Leo", "jsjang100", "자기소개");
+        member.updateInfo(updateRequest);
+
+        // then
+        assertThat(member.getNickname()).isEqualTo(updateRequest.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(updateRequest.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(updateRequest.introduction());
     }
 
 }

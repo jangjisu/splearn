@@ -1,6 +1,6 @@
-package com.clean.splearn.application.provided;
+package com.clean.splearn.application.member.provided;
 
-import com.clean.splearn.domain.Member;
+import com.clean.splearn.domain.member.Member;
 
 /**
  * 회원을 조회 한다.

@@ -1,4 +1,4 @@
-package com.clean.splearn.domain;
+package com.clean.splearn.domain.shared;
 
 import java.util.regex.Pattern;
 
