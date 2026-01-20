@@ -1,8 +1,8 @@
-package com.clean.splearn.application.provided;
+package com.clean.splearn.application.member.provided;
 
 import com.clean.splearn.SplearnTestConfiguration;
-import com.clean.splearn.domain.Member;
-import com.clean.splearn.domain.MemberFixture;
+import com.clean.splearn.domain.member.Member;
+import com.clean.splearn.domain.member.MemberFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;

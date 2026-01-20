@@ -1,7 +1,7 @@
-package com.clean.splearn.application.required;
+package com.clean.splearn.application.member.required;
 
-import com.clean.splearn.domain.Email;
-import com.clean.splearn.domain.Member;
+import com.clean.splearn.domain.shared.Email;
+import com.clean.splearn.domain.member.Member;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;
