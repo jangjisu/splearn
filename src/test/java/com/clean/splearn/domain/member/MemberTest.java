@@ -132,13 +132,13 @@ class MemberTest {
         Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 
-    @DisplayName("")
+    @DisplayName("회원의 정보와 상세정보를 업데이트한다.")
     @Test
     void updateInfo() {
         // given
         member.activate();
         // when
-        var updateRequest = new MemberInfoUpdateRequest("Leo", "jsjang100", "자기소개");
+        var updateRequest = new MemberInfoUpdateRequest("David", "jsjang100", "자기소개");
         member.updateInfo(updateRequest);
 
         // then

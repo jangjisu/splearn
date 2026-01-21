@@ -54,9 +54,7 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
     @Test
     void activate() {
         // given
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        entityManager.flush();
-        entityManager.clear();
+        Member member = registerMember();
 
         // when
         member = memberRegister.activate(member.getId());
@@ -64,5 +62,52 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
 
         // then
         assertThat(member.isActive()).isTrue();
+    }
+
+    @DisplayName("회원을 비활성화 한다.")
+    @Test
+    void deactivate() {
+        // given
+        Member member = registerMember();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        member = memberRegister.deactivate(member.getId());
+
+        entityManager.flush();
+
+        // then
+        assertThat(member.isActive()).isFalse();
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @DisplayName("회원 정보를 업데이트 한다.")
+    @Test
+    void updateInfo() {
+        // given
+        Member member = registerMember();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        MemberInfoUpdateRequest memberInfoUpdateRequest = new MemberInfoUpdateRequest("David", "a1b1", "방가방가");
+        member = memberRegister.updateInfo(member.getId(), memberInfoUpdateRequest);
+
+        // then
+        assertThat(member.getNickname()).isEqualTo(memberInfoUpdateRequest.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(memberInfoUpdateRequest.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(memberInfoUpdateRequest.introduction());
+    }
+
+    private Member registerMember() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+        return member;
     }
 }
