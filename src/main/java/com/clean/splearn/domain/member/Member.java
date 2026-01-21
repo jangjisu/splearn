@@ -2,10 +2,7 @@ package com.clean.splearn.domain.member;
 
 import com.clean.splearn.domain.AbstractEntity;
 import com.clean.splearn.domain.shared.Email;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +28,6 @@ public class Member extends AbstractEntity {
 
     private MemberStatus status;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail detail;
 
     public static Member register(MemberRegisterRequest registerRequest, PasswordEncoder passwordEncoder) {
@@ -68,11 +64,9 @@ public class Member extends AbstractEntity {
         return passwordEncoder.matches(password, this.passwordHash);
     }
 
-    public void changeNickname(String nickname) {
-        this.nickname = requireNonNull(nickname);
-    }
-
     public void updateInfo(MemberInfoUpdateRequest updateRequest) {
+        state(this.status == MemberStatus.ACTIVE, "등록 완료 상태가 아니면 정보를 수정할 수 없습니다");
+
         this.nickname = updateRequest.nickname();
 
         this.detail.updateInfo(updateRequest);
