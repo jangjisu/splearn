@@ -104,8 +104,54 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
         assertThat(member.getDetail().getIntroduction()).isEqualTo(memberInfoUpdateRequest.introduction());
     }
 
+    @DisplayName("같은 프로필로 업데이트 할 수 없다.")
+    @Test
+    void updateInfoFail() {
+        Member member = registerMember();
+        memberRegister.activate(member.getId());
+        MemberInfoUpdateRequest memberInfoUpdateRequest = new MemberInfoUpdateRequest("David", "a1b1", "방가방가");
+        memberRegister.updateInfo(member.getId(), memberInfoUpdateRequest);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        Member member2 = registerMember("toby2@splearn.app");
+        memberRegister.activate(member2.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        Member member3 = registerMember("toby23@splearn.app");
+        memberRegister.activate(member3.getId());
+        MemberInfoUpdateRequest memberInfoUpdateRequest3 = new MemberInfoUpdateRequest("David", "axsbx", "방가방가");
+        memberRegister.updateInfo(member3.getId(), memberInfoUpdateRequest3);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // member2는 기존의 member 와 같은 프로필 주소를 사용할 수 없다.
+        assertThatThrownBy(() -> memberRegister.updateInfo(member2.getId(), memberInfoUpdateRequest))
+            .isInstanceOf(DuplicateProfileException.class);
+
+        //다른 프로필 주소로는 변경 가능
+        memberRegister.updateInfo(member2.getId(), new MemberInfoUpdateRequest("David", "a1b2", "방가방가"));
+
+        //기존 프로필 주소를 바꾸는 것도 가능
+        memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("David", "a1b1", "방가방가"));
+
+        // 프로필 주소 중복은 허용하지 않음
+        assertThatThrownBy(() -> memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("David", "a1b2", "방가방가")))
+                .isInstanceOf(DuplicateProfileException.class);
+    }
+
     private Member registerMember() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+        return member;
+    }
+
+    private Member registerMember(String email) {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest(email));
         entityManager.flush();
         entityManager.clear();
         return member;
